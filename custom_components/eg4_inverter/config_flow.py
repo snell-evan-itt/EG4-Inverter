@@ -104,12 +104,27 @@ class EG4InverterConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 1
     _input_data: dict[str, Any]
 
+    def _next_available_index(self) -> int:
+        """Compute the next available index across existing entries for this domain."""
+        entries = self.hass.config_entries.async_entries(DOMAIN)
+        max_idx = 0
+        from .const import CONF_ENTRY_INDEX  # local import to avoid top-level cycles
+        for e in entries:
+            # Treat legacy entries without index as 1 to avoid duplicates
+            idx = e.data.get(CONF_ENTRY_INDEX, 1)
+            if isinstance(idx, str):
+                try:
+                    idx = int(idx)
+                except Exception:
+                    idx = 1
+            max_idx = max(max_idx, idx if isinstance(idx, int) else 1)
+        return max_idx + 1 if max_idx >= 1 else 1
+
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
         """Get the options flow for this handler."""
         return OptionsFlowHandler(config_entry)
-        # return ExampleOptionsFlowHandler(config_entry)
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
@@ -126,14 +141,23 @@ class EG4InverterConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors["base"] = "cannot_connect"
             except InvalidAuth:
                 errors["base"] = "invalid_auth"
-            except Exception:  
+            except Exception:
                 _LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
 
             if "base" not in errors:
-                await self.async_set_unique_id(info.get("title"))
+                # Determine next available index and store it in entry data
+                from .const import CONF_ENTRY_INDEX
+                next_index = self._next_available_index()
+                data_with_index = {**user_input, CONF_ENTRY_INDEX: next_index}
+
+                # Use a unique_id that includes the index to allow multiple entries
+                # Keep title as-is for display; unique_id is used for duplication guard
+                unique_id = f"{DOMAIN}|{data_with_index.get(CONF_BASE_URL, '')}|{next_index}"
+                await self.async_set_unique_id(unique_id)
                 self._abort_if_unique_id_configured()
-                return self.async_create_entry(title=info["title"], data=user_input)
+
+                return self.async_create_entry(title=info["title"], data=data_with_index)
 
         return self.async_show_form(
             step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors

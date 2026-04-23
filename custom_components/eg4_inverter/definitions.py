@@ -303,6 +303,7 @@ RUNTIME_SENSORS = [
     {
         "type": "sensor",
         "key": "pEpsL1N", # 18kpv and 6000xp wattage load when in EPS mode
+        "key": "pEpsL1N",
         "name": "Power to L1",
         "unit": UnitOfPower.WATT,
         "icon": "mdi:home-import-outline",
@@ -310,6 +311,7 @@ RUNTIME_SENSORS = [
     {
         "type": "sensor",
         "key": "pEpsL2N", # 18kpv and 6000xp wattage load when in EPS mode
+        "key": "pEpsL2N",
         "name": "Power to L2",
         "unit": UnitOfPower.WATT,
         "icon": "mdi:home-import-outline",
@@ -380,6 +382,18 @@ RUNTIME_SENSORS = [
     },
     {
         "type": "sensor",
+        "key": "acCouplePower",
+        "name": "AC Coupled Power", # Micro-inverters are connected to the Inverter's Generator AC port
+        "unit": UnitOfPower.WATT,
+    },
+    {
+        "type": "sensor",
+        "key": "genPower",
+        "name": "Generator Power",
+        "unit": UnitOfPower.WATT,
+    },
+    {
+        "type": "sensor",
         "key": "genVolt",
         "name": "Generator Voltage",
         "unit": UnitOfElectricPotential.VOLT,
@@ -391,6 +405,7 @@ RUNTIME_SENSORS = [
         "name": "Generator Frequency",
         "unit": UnitOfFrequency.HERTZ,
         "scale": 0.1,
+        "scale": 0.01,
     },
     {
         "type": "sensor",
@@ -421,13 +436,13 @@ RUNTIME_SENSORS = [
     },
     {
         "type": "binary_sensor",
-        "key": "bmsCharge",
+        "key": "pCharge",
         "name": "BMS Allow Charging",
         "device_class": BinarySensorDeviceClass.BATTERY_CHARGING,
     },
     {
         "type": "binary_sensor",
-        "key": "bmsDischarge",
+        "key": "pDisCharge",
         "name": "BMS Allow Discharging",
         "device_class": BinarySensorDeviceClass.BATTERY_CHARGING,
     },
