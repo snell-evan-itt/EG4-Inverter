@@ -103,10 +103,13 @@ class EG4BaseBinarySensor(BinarySensorEntity):
 
     @property
     def device_info(self):
-        """Put all sensors under one device in the UI."""
+        """Put all sensors under one device in the UI, with indexed naming for multiple entries."""
+        from .const import CONF_ENTRY_INDEX
+        idx = self._entry.data.get(CONF_ENTRY_INDEX, 1)
+        name = "EG4 Inverter" if (idx == 1 or str(idx) == "1") else f"EG4 Inverter {idx}"
         return {
             "identifiers": {(DOMAIN, self._entry.entry_id)},
-            "name": "EG4 Inverter",
+            "name": name,
             "manufacturer": "EG4",
         }
 
@@ -126,9 +129,12 @@ class EG4InverterBinarySensor(EG4BaseBinarySensor):
     @property
     def is_on(self) -> bool:
         data = self._coordinator.data.get(self._parent_key, {})
+        _LOGGER.debug(f"Data type: {type(data)}")
+        _LOGGER.debug(f"Available attributes: {dir(data)}")
         try:
             raw_value = getattr(data, self._sensor_def["key"])
         except Exception as e:
+            _LOGGER.debug(f"Error accessing attribute '{self._sensor_def['key']}' on data: {e}")
             raw_value = data.get(self._sensor_def["key"], False)
 
         calc_func = self._sensor_def.get("calc")

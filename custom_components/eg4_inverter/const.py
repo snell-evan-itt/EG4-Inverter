@@ -12,6 +12,9 @@ CONF_IGNORE_SSL = "ignore_ssl"
 CONF_RUNTIME_INTERVAL_SECONDS = "runtime_interval_seconds"
 CONF_SETTINGS_INTERVAL_SECONDS = "settings_interval_seconds"
 
+# Multi-inverter support
+CONF_ENTRY_INDEX = "entry_index"
+
 DEFAULT_RUNTIME_INTERVAL_SECONDS = 30
 DEFAULT_SETTINGS_INTERVAL_SECONDS = 1200
 DEFAULT_BASE_URL = "https://monitor.eg4electronics.com"

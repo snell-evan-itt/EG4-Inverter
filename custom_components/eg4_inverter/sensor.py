@@ -134,10 +134,13 @@ class EG4BaseSensor(SensorEntity):
 
     @property
     def device_info(self):
-        """Put all sensors under one device in the UI."""
+        """Put all sensors under one device in the UI, with indexed naming for multiple entries."""
+        from .const import CONF_ENTRY_INDEX
+        idx = self._entry.data.get(CONF_ENTRY_INDEX, 1)
+        name = "EG4 Inverter" if (idx == 1 or str(idx) == "1") else f"EG4 Inverter {idx}"
         return {
             "identifiers": {(DOMAIN, self._entry.entry_id)},
-            "name": "EG4 Inverter",
+            "name": name,
             "manufacturer": "EG4",
         }
 

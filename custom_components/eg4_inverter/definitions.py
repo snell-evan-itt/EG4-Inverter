@@ -391,13 +391,13 @@ RUNTIME_SENSORS = [
     },
     {
         "type": "binary_sensor",
-        "key": "bmsCharge",
+        "key": "pCharge",
         "name": "BMS Allow Charging",
         "device_class": BinarySensorDeviceClass.BATTERY_CHARGING,
     },
     {
         "type": "binary_sensor",
-        "key": "bmsDischarge",
+        "key": "pDisCharge",
         "name": "BMS Allow Discharging",
         "device_class": BinarySensorDeviceClass.BATTERY_CHARGING,
     },
