@@ -352,15 +352,29 @@ RUNTIME_SENSORS = [
     },
     {
         "type": "sensor",
+        "key": "acCouplePower",
+        "name": "AC Coupled Power", # Micro-inverters are connected to the Inverter's Generator AC port
+        "unit": UnitOfPower.WATT,
+    },
+    {
+        "type": "sensor",
+        "key": "genPower",
+        "name": "Generator Power",
+        "unit": UnitOfPower.WATT,
+    },
+    {
+        "type": "sensor",
         "key": "genVolt",
         "name": "Generator Voltage",
         "unit": UnitOfElectricPotential.VOLT,
+        "scale": 0.1,
     },
     {
         "type": "sensor",
         "key": "genFreq",
         "name": "Generator Frequency",
         "unit": UnitOfFrequency.HERTZ,
+        "scale": 0.01,
     },
     {
         "type": "sensor",
