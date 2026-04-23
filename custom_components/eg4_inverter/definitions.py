@@ -211,7 +211,7 @@ RUNTIME_SENSORS = [
         "key": "vpv1",
         "name": "PV1 Voltage",
         "unit": UnitOfElectricPotential.VOLT,
-        "scale": 0.01,  # if 2098 => 20.98, adjust if needed
+        "scale": 0.1,  # if 2098 means 209.8 scale is 0.1 #18kpv is 0.1 scale
         "icon": "mdi:solar-panel",
     },
     {
@@ -219,7 +219,7 @@ RUNTIME_SENSORS = [
         "key": "vpv2",
         "name": "PV2 Voltage",
         "unit": UnitOfElectricPotential.VOLT,
-        "scale": 0.01,
+        "scale": 0.1, #18kpv is 0.1 scale
         "icon": "mdi:solar-panel",
     },
     {
@@ -227,9 +227,9 @@ RUNTIME_SENSORS = [
         "key": "vpv3",
         "name": "PV3 Voltage",
         "unit": UnitOfElectricPotential.VOLT,
-        "scale": 0.01,
+        "scale": 0.1, #18kpv is 0.1 scale
         "icon": "mdi:solar-panel",
-    },
+    },  
     {
         "type": "sensor",
         "key": "ppv1",
@@ -251,6 +251,13 @@ RUNTIME_SENSORS = [
         "unit": UnitOfPower.WATT,
         "icon": "mdi:flash",
     },
+    {
+        "type": "sensor", # 18kpv has a total sum of pv power
+        "key": "ppv",
+        "name": "PV Power Sum",
+        "unit": UnitOfPower.WATT,
+        "icon": "mdi:flash",
+    },    
     {
         "type": "sensor",
         "key": "vacr",  # e.g. 6145 => 61.45 V? Or is it AC voltage in 0.1?
@@ -295,6 +302,7 @@ RUNTIME_SENSORS = [
     },
     {
         "type": "sensor",
+        "key": "pEpsL1N", # 18kpv and 6000xp wattage load when in EPS mode
         "key": "pEpsL1N",
         "name": "Power to L1",
         "unit": UnitOfPower.WATT,
@@ -302,11 +310,19 @@ RUNTIME_SENSORS = [
     },
     {
         "type": "sensor",
+        "key": "pEpsL2N", # 18kpv and 6000xp wattage load when in EPS mode
         "key": "pEpsL2N",
         "name": "Power to L2",
         "unit": UnitOfPower.WATT,
         "icon": "mdi:home-import-outline",
     },
+    {
+        "type": "sensor",
+        "key": "peps", # 18kpv wattage load when in EPS mode
+        "name": "EPS Power Consumption",
+        "unit": UnitOfPower.WATT,
+        "icon": "mdi:home-import-outline",
+    },      
     {
         "type": "sensor",
         "key": "tradiator1",
@@ -388,6 +404,7 @@ RUNTIME_SENSORS = [
         "key": "genFreq",
         "name": "Generator Frequency",
         "unit": UnitOfFrequency.HERTZ,
+        "scale": 0.1,
         "scale": 0.01,
     },
     {
@@ -473,6 +490,13 @@ BATTERY_SUMMARY_SENSORS = [
         "name": "Battery Voltage (Text)",
         "unit": UnitOfElectricPotential.VOLT,
     },
+    # this info is only avaliable in "getBatteryInfo" which this github project does not gather, instead they gather BatteryData and BatteryUnit
+    #{ 
+    #    "type": "sensor",
+    #    "key": "batStatus", #18kpv battery status text, "Charging", "StandBy", "Discharging"
+    #    "name": "Battery Status (Text)",
+    #    "unit": None,
+    #},    
 ]
 
 
@@ -564,21 +588,22 @@ PER_BATTERY_DEFS = [
     },
 ]
 
-SETTING_SENSORS = [
-    {
-        "type": "sensor",
-        "key": "HOLD_EPS_FREQ_SET",
-        "name": "EG4 EPS Frequency Setting",
-        "unit": None,
-        "unit": UnitOfFrequency.HERTZ,
-        "scale": 1,
-    },
-    {
-        "type": "sensor",
-        "key": "HOLD_EPS_VOLT_SET",
-        "name": "EG4 EPS Voltage Setting",
-        "unit": None,
-        "unit": UnitOfElectricPotential.VOLT,
-        "scale": 1,
-    }
-]
+# below is not supported by 18kpv, and dangerous to change anyway   
+# SETTING_SENSORS = [   
+#    {
+#        "type": "sensor",
+#        "key": "HOLD_EPS_FREQ_SET",
+#        "name": "EG4 EPS Frequency Setting",
+#        "unit": None,
+#        "unit": UnitOfFrequency.HERTZ,
+#        "scale": 1,
+#    },
+#    {
+#        "type": "sensor",
+#        "key": "HOLD_EPS_VOLT_SET",
+#        "name": "EG4 EPS Voltage Setting",
+#        "unit": None,
+#        "unit": UnitOfElectricPotential.VOLT,
+#        "scale": 1,
+#    }
+#]
