@@ -351,7 +351,7 @@ RUNTIME_SENSORS = [
     },
     {
         "type": "sensor",
-        "key": "pCharge",
+        "key": "ppvpCharge",  # API library bug: field is named ppvpCharge instead of pCharge
         "name": "Battery Charging Power",
         "unit": UnitOfPower.WATT,
     },
@@ -436,13 +436,13 @@ RUNTIME_SENSORS = [
     },
     {
         "type": "binary_sensor",
-        "key": "pCharge",
+        "key": "bmsCharge",
         "name": "BMS Allow Charging",
         "device_class": BinarySensorDeviceClass.BATTERY_CHARGING,
     },
     {
         "type": "binary_sensor",
-        "key": "pDisCharge",
+        "key": "bmsDischarge",
         "name": "BMS Allow Discharging",
         "device_class": BinarySensorDeviceClass.BATTERY_CHARGING,
     },

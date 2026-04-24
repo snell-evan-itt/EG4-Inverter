@@ -129,17 +129,20 @@ class EG4InverterBinarySensor(EG4BaseBinarySensor):
     @property
     def is_on(self) -> bool:
         data = self._coordinator.data.get(self._parent_key, {})
-        _LOGGER.debug(f"Data type: {type(data)}")
-        _LOGGER.debug(f"Available attributes: {dir(data)}")
-        try:
-            raw_value = getattr(data, self._sensor_def["key"])
-        except Exception as e:
-            _LOGGER.debug(f"Error accessing attribute '{self._sensor_def['key']}' on data: {e}")
-            raw_value = data.get(self._sensor_def["key"], False)
+        key = self._sensor_def["key"]
+        _MISSING = object()
 
         calc_func = self._sensor_def.get("calc")
         if calc_func:
             return calc_func(data)
+
+        raw_value = getattr(data, key, _MISSING)
+        if raw_value is _MISSING:
+            if isinstance(data, dict):
+                raw_value = data.get(key, False)
+            else:
+                _LOGGER.debug("Binary sensor key '%s' not found on %s", key, type(data).__name__)
+                return None
         return bool(raw_value)
 
 class EG4PerBatteryBinarySensor(EG4BaseBinarySensor):

@@ -179,14 +179,14 @@ class EG4InverterSensor(EG4BaseSensor):
     @property
     def native_value(self):
         data = self._coordinator.data.get(self._parent_key, {})
-        try:
-            raw_value = getattr(data, self._sensor_def["key"])
-        except Exception as e:
-            try:
-                raw_value = data.get(self._sensor_def["key"])
-            except Exception as e2:
-                _LOGGER.error(f"{self._sensor_def} with error {e2}")
-                _LOGGER.error(f"Data {vars(data)}")
+        key = self._sensor_def["key"]
+        _MISSING = object()
+        raw_value = getattr(data, key, _MISSING)
+        if raw_value is _MISSING:
+            if isinstance(data, dict):
+                raw_value = data.get(key)
+            else:
+                _LOGGER.debug("Sensor key '%s' not found on %s", key, type(data).__name__)
                 return None
 
         # Special case: parse CO2/Coal text like "367.69 kG"
