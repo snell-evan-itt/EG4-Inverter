@@ -6,9 +6,11 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.helpers.typing import DiscoveryInfoType
+from homeassistant.util import dt as dt_util
 
 from homeassistant.const import (
     PERCENTAGE,
@@ -101,6 +103,8 @@ async def async_setup_entry(
             if name_template != dynamic_name:
                 subdef["name"] = dynamic_name
             entities.append(EG4PerBatterySensor(coordinator, entry, binfo, subdef))
+
+    entities.append(EG4ACCoupleEnergySensor(coordinator, entry))
 
     async_add_entities(entities)
 
@@ -252,3 +256,61 @@ class EG4PerBatterySensor(EG4BaseSensor):
         if self._unit or self._scale != 1.0:
             return parse_float(raw_value, self._scale)
         return raw_value
+
+
+class EG4ACCoupleEnergySensor(EG4BaseSensor, RestoreEntity):
+    """Accumulates AC Coupled Power (W) into energy (kWh) via trapezoidal Riemann sum."""
+
+    def __init__(self, coordinator, entry):
+        super().__init__(coordinator, entry)
+        self._attr_unique_id = f"{entry.entry_id}_ac_couple_energy"
+        self._attr_name = "AC Coupled Energy"
+        self._attr_device_class = SensorDeviceClass.ENERGY
+        self._attr_state_class = SensorStateClass.TOTAL_INCREASING
+        self._attr_native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
+        self._energy_kwh: float = 0.0
+        self._last_power_w: float | None = None
+        self._last_update = None
+
+    async def async_added_to_hass(self):
+        if (last_state := await self.async_get_last_state()) is not None:
+            try:
+                self._energy_kwh = float(last_state.state)
+            except (ValueError, TypeError):
+                pass
+        self.async_on_remove(
+            self._coordinator.async_add_listener(self._handle_coordinator_update)
+        )
+
+    @callback
+    def _handle_coordinator_update(self):
+        runtime = self._coordinator.data.get("runtime")
+        if runtime is None:
+            return
+
+        raw = getattr(runtime, "acCouplePower", None)
+        try:
+            power_w = float(raw) if raw is not None else None
+        except (ValueError, TypeError):
+            power_w = None
+
+        now = dt_util.utcnow()
+
+        if (
+            power_w is not None
+            and self._last_power_w is not None
+            and self._last_update is not None
+        ):
+            delta_hours = (now - self._last_update).total_seconds() / 3600.0
+            avg_w = (power_w + self._last_power_w) / 2.0
+            self._energy_kwh += (avg_w / 1000.0) * delta_hours
+
+        if power_w is not None:
+            self._last_power_w = power_w
+        self._last_update = now
+
+        self.async_write_ha_state()
+
+    @property
+    def native_value(self) -> float:
+        return round(self._energy_kwh, 3)
