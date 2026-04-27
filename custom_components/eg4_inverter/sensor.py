@@ -288,7 +288,7 @@ class EG4ACCoupleEnergySensor(EG4BaseSensor, RestoreEntity):
         if runtime is None:
             return
 
-        raw = getattr(runtime, "acCouplePower", None)
+        raw = getattr(runtime, "genPower", None)
         try:
             power_w = float(raw) if raw is not None else None
         except (ValueError, TypeError):
