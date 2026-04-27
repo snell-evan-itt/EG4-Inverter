@@ -1,6 +1,7 @@
 [![GitHub Release](https://img.shields.io/github/release/snell-evan-itt/EG4-Inverter.svg?style=for-the-badge&color=blue)](https://github.com/snell-evan-itt/EG4-Inverter/releases)
 [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/snell-evan-itt/EG4-Inverter/total?style=for-the-badge)](https://github.com/snell-evan-itt/EG4-Inverter/releases/latest)
 [![HACS Default](https://img.shields.io/badge/HACS-default-blue.svg?style=for-the-badge)](https://hacs.xyz) [![Community forum discussion](https://img.shields.io/badge/COMMUNITY-FORUM-success?style=for-the-badge&color=yellow)](https://community.home-assistant.io/t/custom-component-ecoflow-cloud-api-for-us-users/799962)
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/snell.evan.itt)
 
 # Home Assistant EG4 Inverter Integration
 
