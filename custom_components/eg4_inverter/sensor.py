@@ -105,6 +105,7 @@ async def async_setup_entry(
             entities.append(EG4PerBatterySensor(coordinator, entry, binfo, subdef))
 
     entities.append(EG4ACCoupleEnergySensor(coordinator, entry))
+    entities.append(EG4SolarProductionPowerSensor(coordinator, entry))
 
     async_add_entities(entities)
 
@@ -314,3 +315,23 @@ class EG4ACCoupleEnergySensor(EG4BaseSensor, RestoreEntity):
     @property
     def native_value(self) -> float:
         return round(self._energy_kwh, 3)
+
+
+class EG4SolarProductionPowerSensor(EG4BaseSensor):
+    """Live solar production power — uses ppv (inverter sum) or falls back to ppv1+ppv2+ppv3."""
+
+    def __init__(self, coordinator, entry):
+        super().__init__(coordinator, entry)
+        self._attr_unique_id = f"{entry.entry_id}_solar_production_power"
+        self._attr_name = "Solar Production Power"
+        self._attr_device_class = SensorDeviceClass.POWER
+        self._attr_state_class = SensorStateClass.MEASUREMENT
+        self._attr_native_unit_of_measurement = UnitOfPower.WATT
+        self._attr_icon = "mdi:solar-power"
+
+    @property
+    def native_value(self) -> float | None:
+        runtime = self._coordinator.data.get("runtime")
+        if runtime is None:
+            return None
+        return parse_float(getattr(runtime, "genPower", None))
