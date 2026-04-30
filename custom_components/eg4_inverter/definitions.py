@@ -235,6 +235,8 @@ RUNTIME_SENSORS = [
         "key": "ppv1",
         "name": "PV1 Power",
         "unit": UnitOfPower.WATT,
+        "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
         "icon": "mdi:flash",
     },
     {
@@ -242,6 +244,8 @@ RUNTIME_SENSORS = [
         "key": "ppv2",
         "name": "PV2 Power",
         "unit": UnitOfPower.WATT,
+        "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
         "icon": "mdi:flash",
     },
     {
@@ -249,6 +253,8 @@ RUNTIME_SENSORS = [
         "key": "ppv3",
         "name": "PV3 Power",
         "unit": UnitOfPower.WATT,
+        "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
         "icon": "mdi:flash",
     },
     {
@@ -256,6 +262,8 @@ RUNTIME_SENSORS = [
         "key": "ppv",
         "name": "PV Power Sum",
         "unit": UnitOfPower.WATT,
+        "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
         "icon": "mdi:flash",
     },    
     {
@@ -291,6 +299,8 @@ RUNTIME_SENSORS = [
         "key": "pToGrid",
         "name": "Power to Grid",
         "unit": UnitOfPower.WATT,
+        "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
         "icon": "mdi:transmission-tower-export",
     },
     {
@@ -298,22 +308,26 @@ RUNTIME_SENSORS = [
         "key": "pToUser",
         "name": "Power to User Load",
         "unit": UnitOfPower.WATT,
+        "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
         "icon": "mdi:home-import-outline",
     },
     {
         "type": "sensor",
         "key": "pEpsL1N", # 18kpv and 6000xp wattage load when in EPS mode
-        "key": "pEpsL1N",
         "name": "Power to L1",
         "unit": UnitOfPower.WATT,
+        "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
         "icon": "mdi:home-import-outline",
     },
     {
         "type": "sensor",
         "key": "pEpsL2N", # 18kpv and 6000xp wattage load when in EPS mode
-        "key": "pEpsL2N",
         "name": "Power to L2",
         "unit": UnitOfPower.WATT,
+        "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
         "icon": "mdi:home-import-outline",
     },
     {
@@ -321,6 +335,8 @@ RUNTIME_SENSORS = [
         "key": "peps", # 18kpv wattage load when in EPS mode
         "name": "EPS Power Consumption",
         "unit": UnitOfPower.WATT,
+        "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
         "icon": "mdi:home-import-outline",
     },      
     {
@@ -354,18 +370,24 @@ RUNTIME_SENSORS = [
         "key": "ppvpCharge",  # API library bug: field is named ppvpCharge instead of pCharge
         "name": "Battery Charging Power",
         "unit": UnitOfPower.WATT,
+        "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
     },
     {
         "type": "sensor",
         "key": "pDisCharge",
         "name": "Battery Discharging Power",
         "unit": UnitOfPower.WATT,
+        "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
     },
     {
         "type": "sensor",
         "key": "batPower",
         "name": "Battery Power (Net)",
         "unit": UnitOfPower.WATT,
+        "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
         "description": "Negative => Discharging, Positive => Charging",
     },
     {
@@ -385,12 +407,16 @@ RUNTIME_SENSORS = [
         "key": "genPower",
         "name": "AC Coupled Power",
         "unit": UnitOfPower.WATT,
+        "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
     },
     {
         "type": "sensor",
         "key": "genPower",
         "name": "Generator Power",
         "unit": UnitOfPower.WATT,
+        "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
     },
     {
         "type": "sensor",
@@ -412,6 +438,8 @@ RUNTIME_SENSORS = [
         "key": "consumptionPower",
         "name": "Consumption Power",
         "unit": UnitOfPower.WATT,
+        "device_class": SensorDeviceClass.POWER,
+        "state_class": SensorStateClass.MEASUREMENT,
         "description": "Load consumption power if provided",
     },
     {
